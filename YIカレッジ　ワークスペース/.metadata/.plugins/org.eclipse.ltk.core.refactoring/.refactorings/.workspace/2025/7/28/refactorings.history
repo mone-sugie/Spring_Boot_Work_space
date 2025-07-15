@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="リソース &apos;bookmanager/src/main/java/confing&apos; を削除" deleteContents="false" description="リソース &apos;bookmanager/src/main/java/confing&apos; を削除" element1="/bookmanager/src/main/java/confing" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1752163441061"/>
+</session>

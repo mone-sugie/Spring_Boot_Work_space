@@ -1,0 +1,56 @@
+package controller;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+// 起動用
+@SpringBootApplication
+@RestController
+@RequestMapping("/api")
+public class BookController {
+
+    public static void main(String[] args) {
+        SpringApplication.run(BookController.class, args);
+    }
+
+    // 書籍データモデル
+    static class Book {
+        private Long id;
+        private String title;
+        private String author;
+
+        public Book() {}  // デフォルトコンストラクタ
+
+        public Book(Long id, String title, String author) {
+            this.id = id;
+            this.title = title;
+            this.author = author;
+        }
+
+        // Getter & Setter
+        public Long getId() { return id; }
+        public void setId(Long id) { this.id = id; }
+
+        public String getTitle() { return title; }
+        public void setTitle(String title) { this.title = title; }
+
+        public String getAuthor() { return author; }
+        public void setAuthor(String author) { this.author = author; }
+    }
+
+    // 書籍取得API
+    @GetMapping("/books")
+    public List<Book> getBooks() {
+        return Arrays.asList(
+            new Book(1L, "ノルウェイの森", "村上春樹"),
+            new Book(2L, "吾輩は猫である", "夏目漱石"),
+            new Book(3L, "人間失格", "太宰治")
+        );
+    }
+}

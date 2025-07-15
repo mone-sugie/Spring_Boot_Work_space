@@ -1,0 +1,61 @@
+package service;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+// --- Bookモデルクラス ---
+class Book {
+    private String title;
+    private String author;
+    private String isbn;
+
+    public Book() {}
+
+    public Book(String title, String author, String isbn) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+    }
+
+    // ゲッター
+    public String getTitle() { return title; }
+    public String getAuthor() { return author; }
+    public String getIsbn() { return isbn; }
+
+    // セッター（JSONシリアライズのため）
+    public void setTitle(String title) { this.title = title; }
+    public void setAuthor(String author) { this.author = author; }
+    public void setIsbn(String isbn) { this.isbn = isbn; }
+}
+
+// --- コントローラ兼サービス ---
+@RestController
+@RequestMapping("/books")
+class BookController {
+
+    @GetMapping
+    public List<Book> getBooks() {
+        return Arrays.asList(
+            new Book("君の名は", "新海 誠", "978-4-04-102622-9"),
+            new Book("コンビニ人間", "村田 沙耶香", "978-4-10-350951-4"),
+            new Book("1Q84", "村上 春樹", "978-4-10-353422-6"),
+            new Book("ノルウェイの森", "村上 春樹", "978-4-10-100155-3"),
+            new Book("火花", "又吉 直樹", "978-4-09-386421-0")
+        );
+    }
+}
+
+// --- Spring Boot アプリケーションエントリポイント ---
+@SpringBootApplication
+public class BookService {
+
+    public static void main(String[] args) {
+        SpringApplication.run(BookService.class, args);
+    }
+}
