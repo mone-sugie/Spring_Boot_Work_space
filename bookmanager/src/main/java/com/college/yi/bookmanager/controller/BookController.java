@@ -22,6 +22,7 @@ import com.college.yi.bookmanager.repository.BookRepository;
 @RequestMapping("/api/books")
 public class BookController {
 	
+	
     @Autowired
     private BookRepository bookRepository;
 
