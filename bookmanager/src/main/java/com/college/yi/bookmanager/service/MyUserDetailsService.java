@@ -13,24 +13,21 @@ import com.college.yi.bookmanager.repository.UserMapper;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserMapper userMapper;  // MyBatisのMapper（DBアクセス）
+    private UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // 1. DBからユーザー情報を取得
         com.college.yi.bookmanager.model.User user = userMapper.findByUsername(username);
 
-        // 2. ユーザーが見つからなければ例外を投げる
         if (user == null) {
             throw new UsernameNotFoundException("User not found: " + username);
         }
 
-        // 3. UserDetailsオブジェクトを返す
         return User.builder()
-                .username(user.getUsername())    // ユーザー名
-                .password(user.getPassword())    // パスワード（ハッシュ済み）
-                .roles(user.getRole())            // 役割（例："USER"）
-                .disabled(!user.getEnabled())      // 有効かどうか（falseなら有効）
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .roles(user.getRole())      // "ADMIN", "USER" などの文字列
+                .disabled(!user.getEnabled())
                 .build();
     }
 }
