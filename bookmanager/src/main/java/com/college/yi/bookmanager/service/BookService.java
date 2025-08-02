@@ -20,6 +20,12 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
+    // 全件取得（Entityのまま返す）
+    public List<BookEntity> findAllBooks() {
+        return bookRepository.findAll();
+    }
+
+    // 全件取得（DTOに変換）
     public List<Book> getBooks() {
         List<BookEntity> entities = bookRepository.findAll();
 
@@ -28,19 +34,57 @@ public class BookService {
         }
 
         return entities.stream()
-                .map(e -> new Book(
-                        e.getId(),
-                        e.getTitle(),
-                        e.getAuthor(),
-                        e.getPublisher(),
-                        e.getPublishedDate(),
-                        e.getStock()
-                ))
+                .map(this::toModel)
                 .collect(Collectors.toList());
     }
 
-public List<BookEntity> findAllBooks() {
-    return bookRepository.findAll(); // 全件取得
-}
+    // 書籍作成
+    public Book createBook(Book book) {
+        BookEntity entity = toEntity(book);
+        BookEntity saved = bookRepository.save(entity);
+        return toModel(saved);
+    }
 
+    // 書籍更新（IDを引数として渡すスタイル）
+    public Book updateBook(Long id, Book book) {
+        if (!bookRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "更新対象の書籍が見つかりません");
+        }
+
+        BookEntity entity = toEntity(book);
+        entity.setId(id);
+        BookEntity updated = bookRepository.save(entity);
+        return toModel(updated);
+    }
+
+    // 書籍削除
+    public void deleteBook(Long bookId) {
+        if (!bookRepository.existsById(bookId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "削除対象の書籍が見つかりません");
+        }
+        bookRepository.deleteById(bookId);
+    }
+
+    // Book → BookEntity の変換
+    private BookEntity toEntity(Book book) {
+        BookEntity entity = new BookEntity();
+        entity.setTitle(book.getTitle());
+        entity.setAuthor(book.getAuthor());
+        entity.setPublisher(book.getPublisher());
+        entity.setPublishedDate(book.getPublishedDate());
+        entity.setStock(book.getStock());
+        return entity;
+    }
+
+    // BookEntity → Book の変換
+    private Book toModel(BookEntity entity) {
+        return new Book(
+                entity.getId(),
+                entity.getTitle(),
+                entity.getAuthor(),
+                entity.getPublisher(),
+                entity.getPublishedDate(),
+                entity.getStock()
+        );
+    }
 }
